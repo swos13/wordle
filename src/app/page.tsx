@@ -1,3 +1,10 @@
+import Board from "./components/Board";
+
 export default function Home() {
-  return <h1>Wordle</h1>;
+  return (
+    <main>
+      <h1 className="text-center">Wordle</h1>
+      <Board />
+    </main>
+  );
 }
