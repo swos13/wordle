@@ -7,6 +7,10 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    colors: {
+      "letter-box": "#51565B",
+      "border-color": "#868686",
+    },
     extend: {
       colors: {
         background: "var(--background)",

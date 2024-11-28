@@ -1,12 +1,22 @@
 import { getWord } from "@/api/word";
-import Board from "./components/Board";
+import Game from "./components/Game";
+import localFont from "next/font/local";
+
+const JockeyOne = localFont({
+  src: "./fonts/JockeyOne-Regular.ttf",
+  display: "swap",
+});
 
 export default async function Home() {
   const word = await getWord();
   return (
     <main>
-      <h1 className="text-center">Wordle</h1>
-      <Board word={word} />
+      <h1
+        className={`text-center ${JockeyOne.className} text-6xl mb-4 md:mb-8 `}
+      >
+        Wordie
+      </h1>
+      <Game word={word} />
     </main>
   );
 }

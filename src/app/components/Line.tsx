@@ -64,7 +64,7 @@ export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
         tabIndex={-1}
       />
       <div
-        className={`flex gap-1 ${
+        className={`relative flex gap-1 ${
           isFocused && currentIndex === index
             ? "outline-8 outline-slate-700 outline-none"
             : ""
@@ -77,14 +77,6 @@ export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
           <LetterBox key={index} letter={guess.charAt(index)} />
         ))}
       </div>
-      <button
-        onClick={() => handleSubmit(guess)}
-        disabled={
-          inputRef.current?.value.length !== 5 || currentIndex !== index
-        }
-      >
-        Submit
-      </button>
     </>
   );
 }
