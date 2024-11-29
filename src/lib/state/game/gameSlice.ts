@@ -6,12 +6,14 @@ export interface GameState {
   word: string;
   currentLine: number;
   finished: boolean;
+  guess: string;
 }
 
 const initialState: GameState = {
   word: "",
   currentLine: 0,
   finished: false,
+  guess: "",
 };
 
 export const gameSlice = createSlice({
@@ -20,6 +22,9 @@ export const gameSlice = createSlice({
   reducers: {
     setWord: (state, action: PayloadAction<string>) => {
       state.word = action.payload;
+    },
+    setGuess: (state, action: PayloadAction<string>) => {
+      state.guess = action.payload;
     },
     changeLine: (state) => {
       state.currentLine += 1;
@@ -30,6 +35,6 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setWord, changeLine, finish } = gameSlice.actions;
+export const { setWord, setGuess, changeLine, finish } = gameSlice.actions;
 
 export default gameSlice.reducer;

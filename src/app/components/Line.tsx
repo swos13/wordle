@@ -1,31 +1,35 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, memo } from "react";
 import LetterBox from "./LetterBox";
+import { useDispatch } from "react-redux";
+import { setGuess } from "@/lib/state/game/gameSlice";
 
 type LineProps = {
   length?: 5;
   index: number;
-  currentIndex: number;
-  handleSubmit: (guess: string) => void;
+  submit: (guess: string) => void;
+  currentLine: number;
 };
 
-export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
+function Line({ index, submit, currentLine }: LineProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [guess, setGuess] = useState("");
-  const [isFocused, setIsFocused] = useState(currentIndex === index);
+  const [isFocused, setIsFocused] = useState(currentLine === index);
+  const [inputWord, setInputWord] = useState("");
+  const dispatch = useDispatch();
 
-  const submit = useCallback(
+  const handleSubmit = useCallback(
     function (e: Event) {
-      if (e instanceof KeyboardEvent && e.key === "Enter") {
-        handleSubmit(guess);
+      if (submit && e instanceof KeyboardEvent && e.key === "Enter") {
+        submit(inputWord);
       }
     },
-    [handleSubmit, guess]
+    [submit, inputWord]
   );
 
   const handleChange = () => {
-    setGuess(inputRef.current?.value ?? "");
+    setInputWord(inputRef.current?.value ?? "");
+    dispatch(setGuess(inputRef.current?.value ?? ""));
   };
 
   const handleFocus = (state: boolean) => {
@@ -34,20 +38,20 @@ export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
   };
 
   useEffect(() => {
-    if (currentIndex === index) inputRef.current?.focus();
-  }, [currentIndex, index]);
+    if (currentLine === index) inputRef.current?.focus();
+  }, [currentLine, index]);
 
   useEffect(() => {
     if (inputRef.current) {
       const input = inputRef.current;
-      if (currentIndex === index && guess.length === 5) {
-        input.addEventListener("keypress", submit);
+      if (currentLine === index && inputWord.length === 5) {
+        input.addEventListener("keypress", handleSubmit);
       }
       return () => {
-        input.removeEventListener("keypress", submit);
+        input.removeEventListener("keypress", handleSubmit);
       };
     }
-  }, [currentIndex, inputRef.current, submit]);
+  }, [currentLine, inputRef.current, handleSubmit]);
 
   return (
     <>
@@ -56,7 +60,7 @@ export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
         className="opacity-0 pointer-events-none absolute"
         maxLength={5}
         ref={inputRef}
-        value={guess}
+        value={inputWord}
         onChange={handleChange}
         onBlur={() => handleFocus(false)}
         onFocus={() => handleFocus(true)}
@@ -64,18 +68,20 @@ export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
       />
       <div
         className={`relative flex gap-1 ${
-          isFocused && currentIndex === index
+          isFocused && currentLine === index
             ? "outline-8 outline-slate-700 outline-none"
             : ""
         }`}
         onClick={() => handleFocus(true)}
         onFocus={() => handleFocus(true)}
-        tabIndex={currentIndex === index ? 1 : -1}
+        tabIndex={currentLine === index ? 1 : -1}
       >
         {[...Array(5)].map((_, index) => (
-          <LetterBox key={index} letter={guess.charAt(index)} />
+          <LetterBox key={index} letter={inputWord.charAt(index)} />
         ))}
       </div>
     </>
   );
 }
+
+export default memo(Line);

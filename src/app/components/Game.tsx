@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Board from "./Board";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../lib/state/store";
@@ -14,28 +14,25 @@ export default function Game({ word }: GameProps) {
   const {
     word: wordToGuess,
     finished,
-    currentLine,
-  } = useSelector((state: RootState) => ({
-    ...state.game,
-    word,
-  }));
+    currentLine: currentLine,
+    guess: guess,
+  } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
-
-  console.log(wordToGuess);
 
   useEffect(() => {
     dispatch(setWord(word));
   }, []);
 
-  const submit = (guess: string) => {
-    console.log("im finishing", currentLine, guess);
-    if (guess.toUpperCase() === wordToGuess) {
-      dispatch(finish());
-    } else {
-      dispatch(changeLine());
-    }
-  };
-  console.log(finished);
+  const submit = useCallback(
+    function handleSubmit(word: string) {
+      if (word.toUpperCase() === wordToGuess) {
+        dispatch(finish());
+      } else {
+        dispatch(changeLine());
+      }
+    },
+    [dispatch, wordToGuess]
+  );
 
   return (
     <section className="flex flex-col items-center gap-4">
@@ -51,7 +48,7 @@ export default function Game({ word }: GameProps) {
         </span>
       </section>
       <section className="flex flex-col items-center gap-2">
-        <button>Guess</button>
+        <button onClick={() => submit(guess)}>Guess</button>
         {/* TODO: change text to show when not guessed right. Should depend on currentLine */}
         <h2>
           {!finished
@@ -60,7 +57,7 @@ export default function Game({ word }: GameProps) {
                 currentLine + 1
               } tries.`}
         </h2>
-        <Board word={word} submit={submit} />
+        <Board word={word} submit={submit} currentLine={currentLine} />
       </section>
     </section>
   );
