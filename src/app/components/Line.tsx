@@ -45,7 +45,6 @@ export default function Line({ index, currentIndex, handleSubmit }: LineProps) {
       }
       return () => {
         input.removeEventListener("keypress", submit);
-        console.log(input?.getAttribute("listener"));
       };
     }
   }, [currentIndex, inputRef.current, submit]);

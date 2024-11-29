@@ -1,3 +1,5 @@
+"use client";
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface GameState {
@@ -22,9 +24,12 @@ export const gameSlice = createSlice({
     changeLine: (state) => {
       state.currentLine += 1;
     },
+    finish: (state) => {
+      state.finished = true;
+    },
   },
 });
 
-export const { setWord } = gameSlice.actions;
+export const { setWord, changeLine, finish } = gameSlice.actions;
 
 export default gameSlice.reducer;

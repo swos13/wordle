@@ -1,15 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import Line from "./Line";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/state/store";
 
-export default function Board({ word }: { word: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+type BoardProps = {
+  word: string;
+  submit: (guess: string) => void;
+};
+
+export default function Board({ word, submit }: BoardProps) {
+  const currentIndex = useSelector(
+    (state: RootState) => state.game.currentLine
+  );
 
   const handleSubmit = (guess: string) => {
-    if (guess === word) {
-      //handleFinish
-    } else setCurrentIndex(currentIndex + 1);
+    submit(guess);
   };
 
   return (
