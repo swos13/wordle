@@ -36,9 +36,8 @@ export default function Game({ word }: GameProps) {
   );
 
   return (
-    <section className="flex flex-col items-center gap-4">
-      <Button text="New Word" onClick={() => "nothing"} />
-      <section className="w-full flex justify-around">
+    <section className="flex flex-col items-center gap-8">
+      <section className="w-[320px] sm:w-[360px] flex justify-between">
         <span className="flex flex-col items-center">
           <p>Words guessed</p>
           <h2>12/17</h2>
@@ -48,20 +47,22 @@ export default function Game({ word }: GameProps) {
           <h2>4.6</h2>
         </span>
       </section>
-      <section className="flex flex-col items-center gap-2">
+      <Button text="New Word" onClick={() => "nothing"} />
+      <section className="flex flex-col items-center gap-4">
+        <h2 className="text-wrap text-center">
+          {finished
+            ? `Correct! The word is "${wordToGuess}". You guessed in ${
+                currentLine + 1
+              } tries.`
+            : currentLine >= 6
+            ? `You didn’t manage to guess the word "${wordToGuess}". Good luck next time.`
+            : `Tries left: ${6 - currentLine}`}
+        </h2>
         <Button
           text="Guess"
           onClick={() => submit(guess)}
           disabled={guess.length !== 5}
         />
-        {/* TODO: change text to show when not guessed right. Should depend on currentLine */}
-        <h2>
-          {!finished
-            ? `Tries left: ${6 - currentLine}`
-            : `Correct! The word is "${wordToGuess}". You guessed in ${
-                currentLine + 1
-              } tries.`}
-        </h2>
         <Board word={word} submit={submit} currentLine={currentLine} />
       </section>
     </section>

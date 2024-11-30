@@ -32,12 +32,24 @@ function Line({ index, submit, currentLine }: LineProps) {
     dispatch(setGuess(inputRef.current?.value ?? ""));
   };
 
-  const handleFocus = (state: boolean) => {
-    if (currentLine === index) {
-      setIsFocused(state);
-      if (state) inputRef.current?.focus();
-    }
-  };
+  const handleFocus = useCallback(
+    (state: boolean) => {
+      if (currentLine === index) {
+        setIsFocused(state);
+        if (state) inputRef.current?.focus();
+      }
+    },
+    [currentLine, index]
+  );
+
+  const handleKeypressFocus = useCallback(
+    (e: Event) => {
+      if (e instanceof KeyboardEvent && e.key !== "Enter") {
+        inputRef.current?.focus();
+      }
+    },
+    [inputRef.current]
+  );
 
   useEffect(() => {
     if (currentLine === index) inputRef.current?.focus();
@@ -54,6 +66,15 @@ function Line({ index, submit, currentLine }: LineProps) {
       };
     }
   }, [currentLine, inputRef.current, handleSubmit]);
+
+  useEffect(() => {
+    if (currentLine === index) {
+      document.addEventListener("keypress", handleKeypressFocus);
+    }
+    return () => {
+      document.removeEventListener("keypress", handleKeypressFocus);
+    };
+  }, [currentLine, index, handleKeypressFocus]);
 
   return (
     <>

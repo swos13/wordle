@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <main>
       <h1
-        className={`text-center ${JockeyOne.className} text-6xl mb-4 md:mb-8 `}
+        className={`text-center ${JockeyOne.className} text-6xl mb-12 md:mb-16 `}
       >
         Wordie
       </h1>
