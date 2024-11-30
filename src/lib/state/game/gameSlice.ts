@@ -28,6 +28,7 @@ export const gameSlice = createSlice({
     },
     changeLine: (state) => {
       state.currentLine += 1;
+      state.guess = "";
     },
     finish: (state) => {
       state.finished = true;

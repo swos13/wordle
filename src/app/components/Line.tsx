@@ -33,8 +33,10 @@ function Line({ index, submit, currentLine }: LineProps) {
   };
 
   const handleFocus = (state: boolean) => {
-    setIsFocused(state);
-    if (state) inputRef.current?.focus();
+    if (currentLine === index) {
+      setIsFocused(state);
+      if (state) inputRef.current?.focus();
+    }
   };
 
   useEffect(() => {
@@ -76,8 +78,12 @@ function Line({ index, submit, currentLine }: LineProps) {
         onFocus={() => handleFocus(true)}
         tabIndex={currentLine === index ? 1 : -1}
       >
-        {[...Array(5)].map((_, index) => (
-          <LetterBox key={index} letter={inputWord.charAt(index)} />
+        {[...Array(5)].map((_, letterIndex) => (
+          <LetterBox
+            key={letterIndex}
+            letter={inputWord.charAt(letterIndex)}
+            isFocused={isFocused && currentLine === index}
+          />
         ))}
       </div>
     </>

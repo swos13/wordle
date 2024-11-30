@@ -10,6 +10,11 @@ export default {
     colors: {
       "letter-box": "#51565B",
       "border-color": "#868686",
+      "letter-focused": "#737A82",
+      "border-focused": "#E3E3E3",
+      "button-disabled": "#34373a",
+      "border-disabled": "#696969",
+      "text-disabled": "#ababab",
     },
     extend: {
       colors: {

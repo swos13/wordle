@@ -5,6 +5,7 @@ import Board from "./Board";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../lib/state/store";
 import { setWord, changeLine, finish } from "../../lib/state/game/gameSlice";
+import Button from "./Button";
 
 type GameProps = {
   word: string;
@@ -36,7 +37,7 @@ export default function Game({ word }: GameProps) {
 
   return (
     <section className="flex flex-col items-center gap-4">
-      <button>New Word</button>
+      <Button text="New Word" onClick={() => "nothing"} />
       <section className="w-full flex justify-around">
         <span className="flex flex-col items-center">
           <p>Words guessed</p>
@@ -48,7 +49,11 @@ export default function Game({ word }: GameProps) {
         </span>
       </section>
       <section className="flex flex-col items-center gap-2">
-        <button onClick={() => submit(guess)}>Guess</button>
+        <Button
+          text="Guess"
+          onClick={() => submit(guess)}
+          disabled={guess.length !== 5}
+        />
         {/* TODO: change text to show when not guessed right. Should depend on currentLine */}
         <h2>
           {!finished

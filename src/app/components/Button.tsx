@@ -2,20 +2,20 @@
 
 type ButtonProps = {
   text: string;
-  handleClick: () => void;
+  onClick: () => void;
   disabled?: boolean;
 };
 
 export default function Button({
   text,
-  handleClick,
+  onClick,
   disabled = false,
 }: ButtonProps) {
   return (
     <button
-      className="border-solid border-2 border-letter-box"
+      className="border-solid border-2 border-border-color disabled:border-border-disabled disabled:bg-button-disabled disabled:text-text-disabled bg-letter-box rounded-lg w-[120px] h-[32px] text-center flex justify-center items-center"
       disabled={disabled}
-      onClick={handleClick}
+      onClick={onClick}
     >
       {text}
     </button>
