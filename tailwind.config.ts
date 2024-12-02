@@ -8,13 +8,15 @@ export default {
   ],
   theme: {
     colors: {
-      "letter-box": "#51565B",
       "border-color": "#868686",
       "letter-focused": "#737A82",
       "border-focused": "#E3E3E3",
       "button-disabled": "#34373a",
       "border-disabled": "#696969",
       "text-disabled": "#ababab",
+      "default-box": "#51565B",
+      "correct-box": "#3a8230",
+      "wrong-place-box": "#b3bc35",
     },
     extend: {
       colors: {

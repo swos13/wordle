@@ -19,7 +19,12 @@ export default React.memo(function Board({
       <div>{word}</div>
       {[...Array(6)].map((_, index) => (
         <div key={index}>
-          <Line index={index} submit={submit} currentLine={currentLine} />
+          <Line
+            index={index}
+            submit={submit}
+            currentLine={currentLine}
+            word={word}
+          />
         </div>
       ))}
     </div>

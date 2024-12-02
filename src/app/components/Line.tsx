@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, memo } from "react";
 import LetterBox from "./LetterBox";
+import { LetterBoxColor } from "./LetterBox";
 import { useDispatch } from "react-redux";
 import { setGuess } from "@/lib/state/game/gameSlice";
 
@@ -10,21 +11,36 @@ type LineProps = {
   index: number;
   submit: (guess: string) => void;
   currentLine: number;
+  word: string;
 };
 
-function Line({ index, submit, currentLine }: LineProps) {
+function Line({ index, submit, currentLine, word }: LineProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(currentLine === index);
   const [inputWord, setInputWord] = useState("");
+  const [boxColorNames, setBoxColorNames] = useState<LetterBoxColor[]>(
+    Array(5).fill("default-box")
+  );
   const dispatch = useDispatch();
 
   const handleSubmit = useCallback(
     function (e: Event) {
       if (submit && e instanceof KeyboardEvent && e.key === "Enter") {
+        console.log("submittting");
         submit(inputWord);
+        const newBoxColorNames = Array(5).fill("default-box");
+        inputWord.split("").forEach((letter, id) => {
+          console.log(letter);
+          if (word.charAt(id) === letter.toUpperCase())
+            newBoxColorNames[id] = "correct-box";
+          else if (word.includes(letter.toUpperCase()))
+            newBoxColorNames[id] = "wrong-place-box";
+        });
+        console.log(newBoxColorNames);
+        setBoxColorNames(newBoxColorNames);
       }
     },
-    [submit, inputWord]
+    [submit, inputWord, setBoxColorNames, word]
   );
 
   const handleChange = () => {
@@ -104,6 +120,7 @@ function Line({ index, submit, currentLine }: LineProps) {
             key={letterIndex}
             letter={inputWord.charAt(letterIndex)}
             isFocused={isFocused && currentLine === index}
+            colorName={boxColorNames[letterIndex]}
           />
         ))}
       </div>
