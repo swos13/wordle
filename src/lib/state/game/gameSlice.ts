@@ -30,11 +30,20 @@ export const gameSlice = createSlice({
       return { ...state, currentLine: state.currentLine + 1, guess: "" };
     },
     finish: (state) => {
-      state.finished = true;
+      return { ...state, currentLine: -1, guess: "", finished: true };
+    },
+    reset: (state, action: PayloadAction<string>) => {
+      return {
+        word: action.payload,
+        finished: false,
+        currentLine: 0,
+        guess: "",
+      };
     },
   },
 });
 
-export const { setWord, setGuess, changeLine, finish } = gameSlice.actions;
+export const { setWord, setGuess, changeLine, finish, reset } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;

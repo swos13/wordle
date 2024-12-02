@@ -1,10 +1,15 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../lib/state/store";
-import { setWord, changeLine, finish } from "../../lib/state/game/gameSlice";
+import {
+  setWord,
+  changeLine,
+  finish,
+  reset,
+} from "../../lib/state/game/gameSlice";
 import Button from "./Button";
 
 type GameProps = {
@@ -19,10 +24,22 @@ export default function Game({ word }: GameProps) {
     guess: guess,
   } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
+  const [isNewWord, setIsNewWord] = useState(false);
 
   useEffect(() => {
     dispatch(setWord(word));
   }, []);
+
+  useEffect(() => {
+    if (isNewWord) {
+      fetch("/api/word")
+        .then((resp) => resp.json())
+        .then((newWord) => {
+          dispatch(reset(newWord));
+          setIsNewWord(false);
+        });
+    }
+  }, [isNewWord]);
 
   const submit = useCallback(
     function handleSubmit(word: string) {
@@ -47,7 +64,7 @@ export default function Game({ word }: GameProps) {
           <h2>4.6</h2>
         </span>
       </section>
-      <Button text="New Word" onClick={() => "nothing"} />
+      <Button text="New Word" onClick={() => setIsNewWord(true)} />
       <section className="flex flex-col items-center gap-4">
         <h2 className="text-wrap text-center">
           {finished
@@ -63,7 +80,7 @@ export default function Game({ word }: GameProps) {
           onClick={() => submit(guess)}
           disabled={guess.length !== 5}
         />
-        <Board word={word} submit={submit} currentLine={currentLine} />
+        <Board word={wordToGuess} submit={submit} currentLine={currentLine} />
       </section>
     </section>
   );

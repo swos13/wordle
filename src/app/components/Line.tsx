@@ -19,25 +19,30 @@ function Line({ index, submit, currentLine, word }: LineProps) {
   const [isFocused, setIsFocused] = useState(currentLine === index);
   const [inputWord, setInputWord] = useState("");
   const [boxColorNames, setBoxColorNames] = useState<LetterBoxColor[]>(
-    Array(5).fill("default-box")
+    Array(5).fill("bg-default-box")
   );
   const dispatch = useDispatch();
 
   const handleSubmit = useCallback(
     function (e: Event) {
-      if (submit && e instanceof KeyboardEvent && e.key === "Enter") {
-        console.log("submittting");
+      if (
+        submit &&
+        e instanceof KeyboardEvent &&
+        e.key === "Enter" &&
+        inputRef.current
+      ) {
         submit(inputWord);
-        const newBoxColorNames = Array(5).fill("default-box");
+        const newBoxColorNames = Array(5).fill("bg-default-box");
+
         inputWord.split("").forEach((letter, id) => {
-          console.log(letter);
           if (word.charAt(id) === letter.toUpperCase())
-            newBoxColorNames[id] = "correct-box";
+            newBoxColorNames[id] = "bg-correct-box";
           else if (word.includes(letter.toUpperCase()))
-            newBoxColorNames[id] = "wrong-place-box";
+            newBoxColorNames[id] = "bg-wrong-place-box";
         });
-        console.log(newBoxColorNames);
+
         setBoxColorNames(newBoxColorNames);
+        inputRef.current?.blur();
       }
     },
     [submit, inputWord, setBoxColorNames, word]
@@ -91,6 +96,14 @@ function Line({ index, submit, currentLine, word }: LineProps) {
       document.removeEventListener("keypress", handleKeypressFocus);
     };
   }, [currentLine, index, handleKeypressFocus]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      setBoxColorNames(Array(5).fill("bg-default-box"));
+      setInputWord("");
+    }
+  }, [inputRef.current, word]);
 
   return (
     <>
