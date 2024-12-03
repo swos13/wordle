@@ -31,13 +31,32 @@ function Line({ index, submit, currentLine, word }: LineProps) {
         e.key === "Enter" &&
         inputRef.current
       ) {
-        submit(inputWord);
+        const wordToSubmit = inputWord.toUpperCase();
+
+        submit(wordToSubmit);
         const newBoxColorNames = Array(5).fill("bg-default-box");
 
-        inputWord.split("").forEach((letter, id) => {
-          if (word.charAt(id) === letter.toUpperCase())
+        wordToSubmit.split("").forEach((letter, id) => {
+          const occurencesInWord = word
+            .split("")
+            .reduce((indices, char, id) => {
+              if (letter === char) indices.push(id);
+              return indices;
+            }, new Array<number>());
+
+          const occurencesInSubmit = wordToSubmit
+            .split("")
+            .reduce((indices, char, id) => {
+              if (letter === char) indices.push(id);
+              return indices;
+            }, new Array<number>());
+
+          if (word.charAt(id) === letter)
             newBoxColorNames[id] = "bg-correct-box";
-          else if (word.includes(letter.toUpperCase()))
+          else if (
+            word.includes(letter) &&
+            occurencesInSubmit.indexOf(id) < occurencesInWord.length
+          )
             newBoxColorNames[id] = "bg-wrong-place-box";
         });
 
