@@ -16,7 +16,6 @@ export default React.memo(function Board({
 }: BoardProps) {
   return (
     <div className="flex flex-col gap-1">
-      <div>{word}</div>
       {[...Array(6)].map((_, index) => (
         <div key={index}>
           <Line

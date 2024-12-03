@@ -24,6 +24,30 @@ export default {
         foreground: "var(--foreground)",
       },
     },
+    keyframes: () => ({
+      "spin-horizontally": {
+        "0%": {
+          transform: "rotateX(0deg)",
+        },
+
+        "100%": {
+          transform: "rotateX(180deg)",
+        },
+      },
+      "flip-horizontally": {
+        "0%": {
+          transform: "rotateX(0deg)",
+        },
+
+        "100%": {
+          transform: "rotateX(180deg)",
+        },
+      },
+    }),
+    animation: {
+      "spin-horizontally": "spin-horizontally 1s ease-in-out forwards",
+      "flip-horizontally": "flip-horizontally 0 600ms forwards",
+    },
   },
   plugins: [],
 } satisfies Config;

@@ -3,13 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../lib/state/store";
+import { RootState } from "../lib/state/store";
 import {
   setWord,
   changeLine,
   finish,
   reset,
-} from "../../lib/state/game/gameSlice";
+} from "../lib/state/game/gameSlice";
 import Button from "./Button";
 
 type GameProps = {
@@ -54,18 +54,7 @@ export default function Game({ word }: GameProps) {
 
   return (
     <section className="flex flex-col items-center gap-8">
-      <section className="w-[320px] sm:w-[360px] flex justify-between">
-        <span className="flex flex-col items-center">
-          <p>Words guessed</p>
-          <h2>12/17</h2>
-        </span>
-        <span className="flex flex-col items-center">
-          <p>Avg. guesses</p>
-          <h2>4.6</h2>
-        </span>
-      </section>
-      <Button text="New Word" onClick={() => setIsNewWord(true)} />
-      <section className="flex flex-col items-center gap-4">
+      <section className="flex flex-col items-center gap-6">
         <h2 className="text-wrap text-center">
           {finished
             ? `Correct! The word is "${wordToGuess}". You guessed in ${
@@ -81,6 +70,17 @@ export default function Game({ word }: GameProps) {
           disabled={guess.length !== 5}
         />
         <Board word={wordToGuess} submit={submit} currentLine={currentLine} />
+      </section>
+      <Button text="New Word" onClick={() => setIsNewWord(true)} />
+      <section className="w-[320px] sm:w-[360px] flex justify-between">
+        <span className="flex flex-col items-center">
+          <p>Words guessed</p>
+          <h2>12/17</h2>
+        </span>
+        <span className="flex flex-col items-center">
+          <p>Avg. guesses</p>
+          <h2>4.6</h2>
+        </span>
       </section>
     </section>
   );
