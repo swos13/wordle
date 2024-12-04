@@ -38,27 +38,36 @@ function Line({ index, submit, currentLine, word }: LineProps) {
         const newBoxColorNames = Array(5).fill("bg-default-box");
 
         wordToSubmit.split("").forEach((letter, id) => {
+          const occurenceReducer = (
+            indices: Array<number>,
+            char: string,
+            id: number
+          ) => {
+            if (letter === char) indices.push(id);
+            return indices;
+          };
+
           const occurencesInWord = word
             .split("")
-            .reduce((indices, char, id) => {
-              if (letter === char) indices.push(id);
-              return indices;
-            }, new Array<number>());
+            .reduce(occurenceReducer, new Array<number>());
 
           const occurencesInSubmit = wordToSubmit
             .split("")
-            .reduce((indices, char, id) => {
-              if (letter === char) indices.push(id);
-              return indices;
-            }, new Array<number>());
+            .reduce(occurenceReducer, new Array<number>());
 
           if (word.charAt(id) === letter)
             newBoxColorNames[id] = "bg-correct-box";
           else if (
             word.includes(letter) &&
             occurencesInSubmit.indexOf(id) < occurencesInWord.length
-          )
-            newBoxColorNames[id] = "bg-wrong-place-box";
+          ) {
+            let areInPlace = true;
+            occurencesInWord.forEach((occurence) => {
+              if (!occurencesInSubmit.includes(occurence)) areInPlace = false;
+            });
+
+            if (!areInPlace) newBoxColorNames[id] = "bg-wrong-place-box";
+          }
         });
 
         setBoxColorNames(newBoxColorNames);

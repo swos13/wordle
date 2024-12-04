@@ -21,7 +21,7 @@ export default function Game({ word }: GameProps) {
     word: wordToGuess,
     finished,
     currentLine: currentLine,
-    guess: guess,
+    //guess: guess,
   } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [isNewWord, setIsNewWord] = useState(false);
@@ -56,6 +56,9 @@ export default function Game({ word }: GameProps) {
     <section className="flex flex-col items-center gap-8">
       <section className="flex flex-col items-center gap-6">
         <h2 className="text-wrap text-center">
+          Guess the five letter word! <br /> Submit guesses by pressing ENTER
+        </h2>
+        <h2 className="text-wrap text-center">
           {finished
             ? `Correct! The word is "${wordToGuess}". You guessed in ${
                 currentLine + 1
@@ -64,11 +67,11 @@ export default function Game({ word }: GameProps) {
             ? `You didn’t manage to guess the word "${wordToGuess}". Good luck next time.`
             : `Tries left: ${6 - currentLine}`}
         </h2>
-        <Button
+        {/* <Button
           text="Guess"
           onClick={() => submit(guess)}
           disabled={guess.length !== 5}
-        />
+        /> */}
         <Board word={wordToGuess} submit={submit} currentLine={currentLine} />
       </section>
       <Button text="New Word" onClick={() => setIsNewWord(true)} />
