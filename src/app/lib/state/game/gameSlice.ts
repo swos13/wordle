@@ -30,7 +30,7 @@ export const gameSlice = createSlice({
       return { ...state, currentLine: state.currentLine + 1, guess: "" };
     },
     finish: (state) => {
-      return { ...state, currentLine: -1, guess: "", finished: true };
+      return { ...state, guess: "", finished: true };
     },
     reset: (state, action: PayloadAction<string>) => {
       return {

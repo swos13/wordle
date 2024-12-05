@@ -11,6 +11,7 @@ import {
   reset,
 } from "../lib/state/game/gameSlice";
 import Button from "./Button";
+import useStats from "../hooks/useStats";
 
 type GameProps = {
   word: string;
@@ -20,11 +21,18 @@ export default function Game({ word }: GameProps) {
   const {
     word: wordToGuess,
     finished,
-    currentLine: currentLine,
+    currentLine,
     //guess: guess,
   } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [isNewWord, setIsNewWord] = useState(false);
+
+  const {
+    wordsGuessed,
+    totalWords,
+    avgGuesses,
+    update: updateStats,
+  } = useStats();
 
   useEffect(() => {
     dispatch(setWord(word));
@@ -45,11 +53,15 @@ export default function Game({ word }: GameProps) {
     function handleSubmit(word: string) {
       if (word.toUpperCase() === wordToGuess) {
         dispatch(finish());
+        updateStats({ guessed: true, numberOfGuesses: currentLine + 1 });
       } else {
         dispatch(changeLine());
+        if (currentLine >= 5) {
+          updateStats({ guessed: false, numberOfGuesses: 6 });
+        }
       }
     },
-    [dispatch, wordToGuess]
+    [dispatch, wordToGuess, currentLine]
   );
 
   return (
@@ -78,11 +90,11 @@ export default function Game({ word }: GameProps) {
       <section className="w-[320px] sm:w-[360px] flex justify-between">
         <span className="flex flex-col items-center">
           <p>Words guessed</p>
-          <h2>12/17</h2>
+          <h2>{totalWords === 0 ? "-" : `${wordsGuessed}/${totalWords}`}</h2>
         </span>
         <span className="flex flex-col items-center">
           <p>Avg. guesses</p>
-          <h2>4.6</h2>
+          <h2>{totalWords === 0 ? "-" : avgGuesses}</h2>
         </span>
       </section>
     </section>
