@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Wordle",
-  description: "Wordle made in Next.js by Szymon Wos",
+  title: "Wordie",
+  description: "My version of Wordle made in Next.js with Redux Toolkit.",
 };
 
 export default function RootLayout({
